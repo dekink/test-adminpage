@@ -1,0 +1,121 @@
+  <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div style="text-align: center; margin-bottom: 40px;"><h2>Write</h2></div>    
+                <div class="col-md-8 col-lg-7">
+                <form method="POST" action="/d_write">
+
+
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea class="form-control" rows="18" name="content"></textarea>
+                    </div>
+                    <div style="text-align: right;">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="reset" class="btn btn-default">Reset</button>
+                    </div>
+                </form>
+                </div>
+                <hr>
+                <ul id="placesList"></ul>
+                <div id="pagination"></div>
+                </div>
+                </div>
+                </div>
+                <div class="col-md-4 col-lg-5">
+                    <label>주소 검색</label>
+                <input id="keyWord" type="text" class="form-control" style="width: 100%;"placeholder="장소검색">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" id="SearchBTN" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                          </span>
+                    <div id="map" style="width:100%;height:400px;"></div>
+                    <div id="clickLatlng"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    
+
+    
+<script type="text/javascript">
+$(document).ready(function(){
+      var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+var options = { //지도를 생성할 때 필요한 기본 옵션
+	center: new daum.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+	level: 3 //지도의 레벨(확대, 축소 정도)
+};
+
+var map = new daum.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+var callback = function() {
+    
+		   if ($('#keyWord').val() == ''){
+				 alert('위치를 입력해주세요. ex)서울 경희대');
+			};
+			var keyWord = $("#keyWord").val();
+			keyWord = encodeURIComponent(keyWord);
+			var url = "https://apis.daum.net/local/v1/search/keyword.json?apikey=6b36d2afa10a0c0f4810f9dedf31e3c0&query="+keyWord;
+			
+			$.getJSON(url + "&callback=?" , function(json){
+
+				// 다음 제공 JSON형식이 channel안에 각 item형식으로 되어 있기 때문에 원하는 단계까지 접근하기                          // 위한 items 변수 선언
+				var items = json.channel.item;
+
+				// item안의 latitude, longitude 데이터를 활용하기 위한 메서드
+				$.each(items, function(i, it){
+					var latitude = it.latitude;
+					var longitude = it.longitude;
+					var pos = latitude + "," + longitude;
+					if(i == 0){
+						var container = document.getElementById('map'); 
+
+                                      // 지도를 담을 영역의 DOM 레퍼런스
+
+						var options = { // 지도를 생성할 때 필요한 기본 옵션
+							center: new daum.maps.LatLng(latitude, longitude), // 지도의 중심좌표.
+							level: 3 //지도의 레벨(확대, 축소 정도)
+						};
+						var map = new daum.maps.Map(container, options); // 지도 생성 및 객체 리턴
+					}
+				});	
+			});		
+			// 검색 된 후 input에 입력했던 텍스트를 비워주는 코드
+			$("#keyWord").val("");
+};
+	   $("#SearchBTN").click(callback);
+	   $("#keyWord").keypress(function() {
+		 if (event.which == 13) callback();
+	   });
+	   
+	   // 지도를 클릭한 위치에 표출할 마커입니다
+var marker = new daum.maps.Marker({ 
+    // 지도 중심좌표에 마커를 생성합니다 
+    position: map.getCenter() 
+}); 
+// 지도에 마커를 표시합니다
+marker.setMap(map);
+
+// 지도에 클릭 이벤트를 등록합니다
+// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+daum.maps.event.addListener(map, 'click', function(mouseEvent) {        
+    
+    // 클릭한 위도, 경도 정보를 가져옵니다 
+    var latlng = mouseEvent.latLng; 
+    
+    // 마커 위치를 클릭한 위치로 옮깁니다
+    marker.setPosition(latlng);
+    
+    var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+    message += '경도는 ' + latlng.getLng() + ' 입니다';
+    
+    var resultDiv = document.getElementById('clickLatlng'); 
+    resultDiv.innerHTML = message;
+    
+});
+	});
+</script>
+
+

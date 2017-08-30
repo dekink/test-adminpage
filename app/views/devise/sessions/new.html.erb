@@ -1,15 +1,30 @@
-<h2>Log in</h2>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Random Login Form</title>
+    
+    <link href="assets/style.css" rel="stylesheet">
+    <script src="assets/prefixfree.min.js"></script>
+  </head>
 
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :email, required: false, autofocus: true %>
-    <%= f.input :password, required: false %>
-    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
-  </div>
+  <body>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Log in" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+    <div class="body"></div>
+		<div class="grad2"></div>
+		<div class="header">
+			<div>LIKE LIKE LIKE LIKE LIKE LIKE LIKE LIKE LIKE <br>
+			     </div>
+		</div>
+		<br>
+		<div class="login">
+		  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+				<%= f.email_field :email, autofocus: true %><br>
+				<%= f.password_field :password, autocomplete: "off" %><br>
+				<button class="btn btn-warning"><% f.submit "Log in" %>LOGIN</button>
+				<br>
+				<%= render "devise/shared/links" %>
+			<% end %>
+		</div>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  </body>
+</html>

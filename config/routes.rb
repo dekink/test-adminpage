@@ -6,6 +6,16 @@ Rails.application.routes.draw do
   resources :posts
   get '/errorpage/error_page'
   #post '/tbs2/admin2' => 'rails_admin/main#dashboard'
+  
+  get '/diary/index'
+  get '/diary/dWrite'
+  post '/d_write' => 'diary#d_write'
+  get '/diary/dView/:diary_id' => 'diary#dView'
+  post '/diary/dView/:diary_id' => 'diary#dView'
+  get '/dDelete/:diary_id' => 'diary#dDelete'
+  post '/commentWrite' => 'diary#commentWrite'
+  get '/commentDelete/:comment_id/:diary_id' => 'diary#commentDelete'
+  get '/commentUpdate/:comment_id/:diary_id' => 'diary#commentUpdate'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

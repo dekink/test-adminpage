@@ -1,0 +1,72 @@
+<div class="container" style="margin-top:60px;">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div>
+                    <h3>Diary. <%=current_user.email%></h3><br>
+                </div>
+                <div style="margin:30px; border: 2px solid #FFA9D0;">
+                <div class="contentView" style="height:300px;">
+                    <%= @diary.content %><br>
+                </div>
+                <div>
+                    <a href="/dDelete/<%=@diary.id%>">삭제</a>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="commentView">
+            <div class="form-group">
+                <label for="content">댓글</label>
+                <textarea class="form-control" rows="6" name="name_comment" id="id_comment"></textarea>
+                <div class="comment_submit">
+                    <button type="submit" id="comment_submit" value="<%=current_user.email%>">submit</button>
+                </div>
+            </div>
+        </div>
+        <div class="comment_div">
+            <% @diary.comments.each do |b| %>
+            <%= b.content %> || <%=b.user.email%>
+            <% if b.user.email == current_user.email %>
+                <li class="dropdown">
+                        <a id="dLabel" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false" class="btn_bg">
+                        수정
+                        <span class="caret"></span>
+                        </a>
+                      <ul class="dropdown-menu" aria-labelledby="dLabel">
+                        <li>
+                          <form method="POST" anction="/commentUpdate/<%= b.id %>/<%=@diary.id%>">
+                          <textarea class="form-control" rows="6" name="comment"><%= b.content%></textarea>
+                            <button type="submit">submit</button>
+                            </form>
+                        </li>
+                      </ul>
+                    </li>
+                
+                <a href="/commentDelete/<%= b.id %>/<%=@diary.id%>" >삭제</a>
+            <%end%>
+            <hr>
+            <%end%>
+        </div>
+</div>
+
+<script>
+    $(function() {
+    $('#comment_submit').click(function(){
+        var comment_content = $('#id_comment').val();
+        var user = this.value;
+        $.ajax({
+            method: "POST",
+            url: '/commentWrite',
+            data: { name_comment: comment_content, diary_id: <%= @diary.id %>},
+            success: function(request,status,error) {
+               
+            },
+            error: function() {
+                alert('성공');
+                $('.comment_div').append(comment_content + " || " + user);
+                $('#id_comment').val('');
+            }
+        })
+    });
+});
+</script>

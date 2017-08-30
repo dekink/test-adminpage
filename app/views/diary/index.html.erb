@@ -1,0 +1,31 @@
+<!--diary-->
+<div class="col-md-6 text-center">
+  <div style="margin:30px; border: 2px solid #A9D8FF; "> 
+  
+  <div style="padding:10px;text-align:right;margin-right:80px;color:#A9D8FF;">
+    <h1>Diary</h1>
+  </div>
+  <div class="table" style="padding:50px;">
+    <table style="width:100%;margin:15px 0;border:0;">
+      <thead>
+        <tr style="border: 1px solid #ffffff;padding:15px;">
+          <th style="padding:15px;text-align:center;width:80%">Content</th>
+          <th style="padding:15px;text-align:center;">User</th>
+        </tr>
+      </thead>
+
+      <tbody style="padding:20px;">
+        <% @d.each do |d| %>
+          <tr style="border: 1px solid #ffffff;padding:15px;border-width:1px 0 1px 0;">
+            <td style="border-collapse:collapse;padding:15px;"><a href="/diary/dView/<%=d.id%>"><%= d.content %></a></td>
+            <td style="border-collapse:collapse;padding:15px;"><%= d.user.email %></td>
+         </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<br>
+
+<a href="/diary/dWrite">Write</a>
+</div>
+</div>
